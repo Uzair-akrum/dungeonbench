@@ -7,9 +7,9 @@
 
 ## The Problem
 
-Every LLM benchmark tests isolated capabilities: math, coding, knowledge retrieval. Models ace them all.
+Most LLM benchmark tests isolated capabilities: math, coding, knowledge retrieval. Models ace them all.
 
-But real-world agent tasks require **integrated reasoning** — tracking multiple entities, applying rules conditionally, maintaining state over time, refusing invalid actions. When capabilities must work together.
+But real-world agent tasks require **integrated reasoning**  tracking multiple entities, applying rules conditionally, maintaining state over time, refusing invalid actions. When capabilities must work together.
 
 ---
 
@@ -19,7 +19,7 @@ A model plays Dungeon Master for a simple combat encounter. 7 goblins. A poisone
 
 | Test | What Breaks |
 |------|-------------|
-| **Mass Effects** | "Damage all 7 goblins with trait modifiers" → Models double-count entities, apply wrong modifiers |
+| **Mass Effects** | "Damage all 8 entities (7 goblins + player) with trait modifiers" → Models double-count entities, apply wrong modifiers |
 | **Line of Sight** | "Shoot the goblin behind the wall" → Models roll damage, then mention the wall exists |
 | **Delayed Blast** | "Bomb explodes turn 3, track poison each turn" → Models forget which turn it is |
 
@@ -42,13 +42,13 @@ The temporal test was hard on every model
 
 ## Greatest Hits (Failures)
 
-**Gemini counts 7 goblins as 12:**
+**Gemini counts 8 entities as 12:**
 
 ```
-Expected updateCharacterStats to be called 7 times, got 12
+Expected updateCharacterStats to be called 8 times, got 12
 ```
 
-It updated some goblins twice. In a fight with 7 clearly-named entities.
+It updated some entities twice. In a fight with 8 clearly-named entities (7 goblins + player).
 
 **GPT-5.2 shoots a goblin, forgets to record the damage:**
 
@@ -84,14 +84,12 @@ D&D isn't the point. It's a delivery mechanism for testing capabilities that mat
 
 | D&D Mechanic | Real Capability | Production Failure Mode |
 |--------------|-----------------|------------------------|
-| Track 7 goblin HP values | Multi-entity state management | Duplicate API calls, lost context |
+| Track 8 entity HP values (7 goblins + player) | Multi-entity state management | Duplicate API calls, lost context |
 | Poison ticks every turn | Temporal reasoning | Missed scheduled tasks, wrong event timing |
 | Can't shoot through walls | Constraint enforcement | Invalid operations executed |
 | Shielded = half damage | Conditional rule application | Wrong business logic |
 | 2 arrows, can't fire 3 | Resource tracking | Quota violations, resource leaks |
 | Dash OR attack, not both | Mutual exclusion | Race conditions, invalid state |
-
-If a model can't track 7 HP values over 3 turns, it can't reliably manage a multi-file refactor, maintain agent state, or execute a plan with resource constraints.
 
 ---
 
@@ -99,7 +97,7 @@ If a model can't track 7 HP values over 3 turns, it can't reliably manage a mult
 
 ### Mass Effects + Modifiers
 
-7 entities with different traits (shielded, vulnerable, resistant, normal). Two area attacks.
+8 entities (7 goblins + player) with different traits (shielded, vulnerable, resistant, normal). Two area attacks.
 
 **Turn 1:** Arcane Pulse hits everyone
 - Shielded: 3 damage
@@ -134,7 +132,7 @@ A bomb, a poisoned player, multiple goblins in varying positions.
 
 ## Capabilities Tested
 
-1. **Multi-entity state tracking** — Maintain 7 entity states with distinct properties
+1. **Multi-entity state tracking** — Maintain 8 entity states (7 goblins + player) with distinct properties
 
 2. **Same-call binding** — Name and HP must be updated in a single tool call
 
@@ -318,6 +316,4 @@ MIT
 
 ---
 
-<p align="center">
-  <i>If your AI can't DM a goblin fight, maybe don't let it manage your infrastructure.</i>
-</p>
+ 
