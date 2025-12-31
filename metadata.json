@@ -1,0 +1,5 @@
+{
+  "name": "DungeonBench",
+  "description": "A benchmark for LLMs acting as Dungeon Masters, testing state tracking, rule adherence, and spatial reasoning in D&D scenarios.",
+  "requestFramePermissions": []
+}
