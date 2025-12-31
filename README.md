@@ -8,7 +8,7 @@
 
 ## The Problem
 
-Most LLM benchmark tests isolated capabilities: math, coding, knowledge retrieval. Models ace them all.
+Most LLM benchmark tests isolated capabilities: math, coding, knowledge retrieval.  
 
 But real-world agent tasks require **integrated reasoning**  tracking multiple entities, applying rules conditionally, maintaining state over time, refusing invalid actions. When capabilities must work together.
 
