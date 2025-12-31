@@ -41,10 +41,12 @@ export default function App() {
           </div>
           
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" className="hidden md:flex gap-2">
-              <Github className="w-4 h-4" />
-              <span>GitHub</span>
-            </Button>
+            <a href="https://github.com/Uzair-akrum/dungeonbench" target="_blank" rel="noopener noreferrer">
+              <Button variant="ghost" size="sm" className="hidden md:flex gap-2">
+                <Github className="w-4 h-4" />
+                <span>GitHub</span>
+              </Button>
+            </a>
           </div>
         </div>
       </header>
