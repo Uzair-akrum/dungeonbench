@@ -2,7 +2,8 @@
 
 **A benchmark that makes AI models DM a D&D combat.**
 
- 
+![Benchmark Dashboard](assets/Benchmark%20Screenshot%20from%202026-01-01%2000-36-26.png)
+
 ---
 
 ## The Problem
@@ -97,6 +98,8 @@ D&D isn't the point. It's a delivery mechanism for testing capabilities that mat
 
 ### Mass Effects + Modifiers
 
+![Mass Effects Benchmark Dashboard](assets/mass-effects-dashboard.png)
+
 8 entities (7 goblins + player) with different traits (shielded, vulnerable, resistant, normal). Two area attacks.
 
 **Turn 1:** Arcane Pulse hits everyone
@@ -112,6 +115,8 @@ D&D isn't the point. It's a delivery mechanism for testing capabilities that mat
 
 ### Line of Sight + Ammo
 
+![Line of Sight Benchmark Dashboard](assets/line-of-sight-dashboard.png)
+
 Corridor combat with walls blocking shots.
 
 - Only x=0 squares are open
@@ -120,6 +125,8 @@ Corridor combat with walls blocking shots.
 - Dashing prevents attacking same turn
 
 ### Delayed Blast
+
+![Delayed Blast Benchmark Dashboard](assets/delayed-blast-dashboard.png)
 
 A bomb, a poisoned player, multiple goblins in varying positions.
 
