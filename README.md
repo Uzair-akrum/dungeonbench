@@ -292,28 +292,6 @@ PRs addressing these are welcome.
 
 ---
 
-## Contributing
 
-The goal is tests that make frontier models sweat. We're looking for:
-
-- New test archetypes (initiative tracking, concentration, multi-target with friendly fire)
-
-- Adversarial variants (player argues for wrong rule interpretation)  
-
-- Longer sequences (6-8 steps to test exponential decay)
-
-- Confusingly-named entities ("Goblin Guard" vs "Guard Goblin")
-
-- Impossible scenarios (test graceful refusal)
-
-Open an issue or PR. Let's find out what else breaks.
-
----
-
-## License
-
-MIT
-
----
 
  
