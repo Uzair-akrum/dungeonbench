@@ -1,8 +1,8 @@
-# 🎲 CritFail
+# 🎲 DungeonBench
 
 **A benchmark that makes AI models DM a D&D combat. They can't.**
 
-GPT-5.2 scores 42% on "remember when the bomb explodes." Gemini counts 8 goblins as 12. GLM-4.7 shoots through walls.
+GPT-5.2 scores 42% on "remember when the bomb explodes." Gemini counts 7 goblins as 12. GLM-4.7 shoots through walls.
 
 Your nephew running his first campaign does better than frontier AI.
 
@@ -20,11 +20,11 @@ We built a benchmark that exposes this. It's disguised as D&D.
 
 ## What We Test
 
-A model plays Dungeon Master for a simple combat encounter. 8 goblins. A poisoned player. A ticking bomb.
+A model plays Dungeon Master for a simple combat encounter. 7 goblins. A poisoned player. A ticking bomb.
 
 | Test | What Breaks |
 |------|-------------|
-| **Mass Effects** | "Damage all 8 goblins with trait modifiers" → Models double-count entities, apply wrong modifiers |
+| **Mass Effects** | "Damage all 7 goblins with trait modifiers" → Models double-count entities, apply wrong modifiers |
 | **Line of Sight** | "Shoot the goblin behind the wall" → Models roll damage, then mention the wall exists |
 | **Delayed Blast** | "Bomb explodes turn 3, track poison each turn" → Models forget which turn it is |
 
@@ -49,13 +49,13 @@ The temporal test breaks everyone. "Remember the bomb, count to 3" shouldn't be 
 
 ## Greatest Hits (Failures)
 
-**Gemini counts 8 goblins as 12:**
+**Gemini counts 7 goblins as 12:**
 
 ```
-Expected updateCharacterStats to be called 8 times, got 12
+Expected updateCharacterStats to be called 7 times, got 12
 ```
 
-It updated some goblins twice. In a fight with 8 clearly-named entities.
+It updated some goblins twice. In a fight with 7 clearly-named entities.
 
 **GPT-5.2 shoots a goblin, forgets to record the damage:**
 
@@ -91,14 +91,14 @@ D&D isn't the point. It's a delivery mechanism for testing capabilities that mat
 
 | D&D Mechanic | Real Capability | Production Failure Mode |
 |--------------|-----------------|------------------------|
-| Track 8 goblin HP values | Multi-entity state management | Duplicate API calls, lost context |
+| Track 7 goblin HP values | Multi-entity state management | Duplicate API calls, lost context |
 | Poison ticks every turn | Temporal reasoning | Missed scheduled tasks, wrong event timing |
 | Can't shoot through walls | Constraint enforcement | Invalid operations executed |
 | Shielded = half damage | Conditional rule application | Wrong business logic |
 | 2 arrows, can't fire 3 | Resource tracking | Quota violations, resource leaks |
 | Dash OR attack, not both | Mutual exclusion | Race conditions, invalid state |
 
-If a model can't track 8 HP values over 3 turns, it can't reliably manage a multi-file refactor, maintain agent state, or execute a plan with resource constraints.
+If a model can't track 7 HP values over 3 turns, it can't reliably manage a multi-file refactor, maintain agent state, or execute a plan with resource constraints.
 
 ---
 
@@ -106,7 +106,7 @@ If a model can't track 8 HP values over 3 turns, it can't reliably manage a mult
 
 ### Mass Effects + Modifiers
 
-8 entities with different traits (shielded, vulnerable, resistant, normal). Two area attacks.
+7 entities with different traits (shielded, vulnerable, resistant, normal). Two area attacks.
 
 **Turn 1:** Arcane Pulse hits everyone
 - Shielded: 3 damage
@@ -141,7 +141,7 @@ A bomb, a poisoned player, multiple goblins in varying positions.
 
 ## Capabilities Tested
 
-1. **Multi-entity state tracking** — Maintain 7-8 entity states with distinct properties
+1. **Multi-entity state tracking** — Maintain 7 entity states with distinct properties
 
 2. **Same-call binding** — Name and HP must be updated in a single tool call
 
@@ -163,8 +163,8 @@ A bomb, a poisoned player, multiple goblins in varying positions.
 
 ```bash
 # Clone the repo
-git clone https://github.com/[your-username]/critfail.git
-cd critfail
+git clone https://github.com/[your-username]/dungeonbench.git
+cd dungeonbench
 
 # Install dependencies
 npm install
@@ -256,7 +256,7 @@ Tests are defined in `tests/roleplay/`:
 
 Most benchmarks get solved because models memorize patterns from training data.
 
-CritFail resists this through:
+DungeonBench resists this through:
 
 1. **10 variants per test** — Different HP offsets, positions, trait assignments
 
@@ -291,11 +291,11 @@ PRs addressing these are welcome.
 ## Citation
 
 ```bibtex
-@misc{critfail2025,
-  title={CritFail: A D&D-Based Benchmark for Multi-Entity State Management in LLMs},
+@misc{dungeonbench2025,
+  title={DungeonBench: A D&D-Based Benchmark for Multi-Entity State Management in LLMs},
   author={[Your Name]},
   year={2025},
-  url={https://github.com/[your-username]/critfail}
+  url={https://github.com/[your-username]/dungeonbench}
 }
 ```
 
