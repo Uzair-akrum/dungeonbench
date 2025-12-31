@@ -79,7 +79,7 @@ const CSSBarChart = ({
               title={item.model}
             >
               <span
-                className="inline-block origin-top-left rotate-[35deg] whitespace-nowrap leading-none text-[11px] tracking-wide text-neutral-400 hover:text-neutral-200 transition-colors cursor-default font-light italic"
+                className="inline-block origin-top-left rotate-[35deg] whitespace-nowrap leading-none text-[11px] tracking-wide text-neutral-200 hover:text-white transition-colors cursor-default font-normal"
               >
                 {item.model.split('/').pop()?.split(':')[0] || item.model}
               </span>
