@@ -44,8 +44,27 @@ export interface CategoryScore {
   zeroPasses: number;
 }
 
+export interface FailedExpectation {
+  type: string;
+  toolName?: string;
+  message?: string;
+  expected?: any;
+  actual?: any;
+}
+
+export interface ModelFailure {
+  testId: string;
+  testName: string;
+  stepId: string;
+  stepDescription: string;
+  failedExpectations: FailedExpectation[];
+  toolCalls: any[];
+  category: TestCategoryId;
+}
+
 export interface ModelCategoryData extends ModelData {
   categoryScores: Record<TestCategoryId, CategoryScore>;
+  failures: ModelFailure[];
 }
 
 type RunResult = {
@@ -65,9 +84,23 @@ type RunResult = {
       passRate: number;
       tests: {
         testId: string;
+        name: string;
         passRate: number;
         steps: {
-          latencyMs: number;
+          stepId: string;
+          description: string;
+          toolCalls: any[];
+          expectations: Array<{
+            expectation: {
+              type: string;
+              toolName?: string;
+              [key: string]: any;
+            };
+            pass: boolean;
+            message?: string;
+            [key: string]: any;
+          }>;
+          latencyMs?: number;
         }[];
       }[];
     };
@@ -188,6 +221,50 @@ const modelEntries: ModelEntry[] = runs.flatMap((run) =>
     const errorRate = totalTests > 0 ? Number(((zeroPasses / totalTests) * 100).toFixed(1)) : 0;
     const incorrect = Math.max(totalTests - fullPasses - zeroPasses, 0);
 
+    // Extract failures
+    const failures: ModelFailure[] = [];
+    for (const test of tests) {
+      const testSteps = (test as any).steps ?? [];
+      
+      // Determine category for this test
+      let category: TestCategoryId = 'overall';
+      for (const [catKey, catConfig] of Object.entries(TEST_CATEGORIES)) {
+        if (catConfig.pattern && test.testId?.startsWith(catConfig.pattern)) {
+          category = catKey as TestCategoryId;
+          break;
+        }
+      }
+
+      for (const step of testSteps) {
+        const stepExpectations = step.expectations ?? [];
+        const failedExpectations: FailedExpectation[] = [];
+
+        for (const exp of stepExpectations) {
+          if (exp.pass === false) {
+            failedExpectations.push({
+              type: exp.expectation?.type ?? 'unknown',
+              toolName: exp.expectation?.toolName,
+              message: exp.message,
+              expected: exp.expectation?.value ?? exp.expectation?.count ?? exp.expectation?.pattern,
+              actual: undefined // Could extract from toolCalls if needed
+            });
+          }
+        }
+
+        if (failedExpectations.length > 0) {
+          failures.push({
+            testId: test.testId ?? '',
+            testName: (test as any).name ?? test.testId ?? '',
+            stepId: step.stepId ?? '',
+            stepDescription: step.description ?? '',
+            failedExpectations,
+            toolCalls: step.toolCalls ?? [],
+            category
+          });
+        }
+      }
+    }
+
     return {
       model: target.target.label ?? target.target.model,
       correct: fullPasses,
@@ -200,6 +277,7 @@ const modelEntries: ModelEntry[] = runs.flatMap((run) =>
       tokensPerAction: target.metrics.cost.tokensPerAction ?? 0,
       totalTokens,
       categoryScores,
+      failures,
       runTimestamp: run.metadata.timestamp,
       totalSteps: stepCount
     };

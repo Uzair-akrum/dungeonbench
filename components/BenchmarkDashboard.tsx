@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Trophy, Scroll, Sword, Dna, Flame, Eye, Zap, Target } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/components";
 import { benchmarkData, ModelData, ModelCategoryData, TEST_CATEGORIES, TestCategoryId } from "../data/benchmark";
+import FailureViewer from "./FailureViewer";
 
 type MetricId = "accuracy";
 
@@ -11,13 +12,15 @@ const CSSBarChart = ({
   dataKey,
   maxValue,
   formatter = (v: number) => v.toString(),
-  colorFn = (_i: number) => "#fbbf24"
+  colorFn = (_i: number) => "#fbbf24",
+  onBarClick
 }: {
   data: ModelData[];
   dataKey: keyof ModelData;
   maxValue: number;
   formatter?: (v: number) => string;
   colorFn?: (index: number) => string;
+  onBarClick?: (item: ModelData) => void;
 }) => {
   const chartHeight = 300; // Fixed pixel height for bars
   const safeMaxValue = maxValue > 0 ? maxValue : 1;
@@ -64,6 +67,7 @@ const CSSBarChart = ({
                   boxShadow: `0 0 30px ${color}50, inset 0 1px 0 rgba(255,255,255,0.2)`
                 }}
                 title={`${item.model}: ${formatter(value)}`}
+                onClick={() => onBarClick?.(item)}
               />
             </div>
           );
@@ -95,6 +99,7 @@ export default function BenchmarkDashboard() {
   const { rankings, metadata } = benchmarkData;
   const [activeMetric, setActiveMetric] = useState<MetricId>("accuracy");
   const [testMode, setTestMode] = useState<TestCategoryId>("delayed-blast");
+  const [selectedModel, setSelectedModel] = useState<ModelCategoryData | null>(null);
 
   const derivedByMode = useMemo(() => {
     const result = {} as Record<TestCategoryId, {
@@ -248,6 +253,7 @@ export default function BenchmarkDashboard() {
                     const colors = ['#f59e0b', '#94a3b8', '#d97706', '#6366f1', '#8b5cf6', '#a855f7', '#c084fc'];
                     return colors[i] || '#6b7280';
                   }}
+                  onBarClick={(item) => setSelectedModel(item as ModelCategoryData)}
                 />
               </CardContent>
             </Card>
@@ -256,6 +262,14 @@ export default function BenchmarkDashboard() {
 
 
       </Tabs>
+
+      {/* Failure Viewer Modal */}
+      {selectedModel && (
+        <FailureViewer
+          model={selectedModel}
+          onClose={() => setSelectedModel(null)}
+        />
+      )}
     </div>
   );
 }

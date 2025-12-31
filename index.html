@@ -4,6 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DungeonBench - LLM DM Benchmark</title>
+    <meta name="description" content="Benchmark comparing LLMs as Dungeon Masters for tabletop RPGs">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DungeonBench - LLM DM Benchmark">
+    <meta name="twitter:description" content="Benchmark comparing LLMs as Dungeon Masters for tabletop RPGs">
+    <meta name="twitter:image" content="https://dungeonbench.vercel.app/preview.png">
+
+    <!-- Open Graph (Facebook, Discord, LinkedIn, etc.) -->
+    <meta property="og:title" content="DungeonBench - LLM DM Benchmark">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dungeonbench.vercel.app/">
+    <meta property="og:image" content="https://dungeonbench.vercel.app/preview.png">
+    <meta property="og:description" content="Benchmark comparing LLMs as Dungeon Masters for tabletop RPGs">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -85,6 +99,26 @@
       }
       h1, h2, h3, h4, h5, h6 {
         font-family: 'Cinzel', serif;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes zoomIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+      }
+      @keyframes fadeInZoom {
+        from { opacity: 0; transform: scale(0.9); }
+        to { opacity: 1; transform: scale(1); }
+      }
+      @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
       }
     </style>
     <link rel="stylesheet" href="/index.css">
