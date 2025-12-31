@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "eval": "tsx benchmark/src/cli/index.ts run",
     "bench:list": "tsx benchmark/src/cli/index.ts list",
     "bench:roleplay": "tsx benchmark/src/cli/index.ts run --suite roleplay"
   },

@@ -1,24 +1,19 @@
 # 🎲 DungeonBench
 
-**A benchmark that makes AI models DM a D&D combat. They can't.**
+**A benchmark that makes AI models DM a D&D combat.**
 
-GPT-5.2 scores 42% on "remember when the bomb explodes." Gemini counts 7 goblins as 12. GLM-4.7 shoots through walls.
-
-Your nephew running his first campaign does better than frontier AI.
-
+ 
 ---
 
 ## The Problem
 
 Every LLM benchmark tests isolated capabilities: math, coding, knowledge retrieval. Models ace them all.
 
-But real-world agent tasks require **integrated reasoning** — tracking multiple entities, applying rules conditionally, maintaining state over time, refusing invalid actions. When capabilities must work together, models collapse.
-
-We built a benchmark that exposes this. It's disguised as D&D.
+But real-world agent tasks require **integrated reasoning** — tracking multiple entities, applying rules conditionally, maintaining state over time, refusing invalid actions. When capabilities must work together.
 
 ---
 
-## What We Test
+## What's the  Test
 
 A model plays Dungeon Master for a simple combat encounter. 7 goblins. A poisoned player. A ticking bomb.
 
@@ -27,8 +22,6 @@ A model plays Dungeon Master for a simple combat encounter. 7 goblins. A poisone
 | **Mass Effects** | "Damage all 7 goblins with trait modifiers" → Models double-count entities, apply wrong modifiers |
 | **Line of Sight** | "Shoot the goblin behind the wall" → Models roll damage, then mention the wall exists |
 | **Delayed Blast** | "Bomb explodes turn 3, track poison each turn" → Models forget which turn it is |
-
-These aren't cherry-picked failures. They're consistent, reproducible breakdowns in state management.
 
 ---
 
@@ -43,7 +36,7 @@ These aren't cherry-picked failures. They're consistent, reproducible breakdowns
 | Devstral | 71.4% | 55-66% |
 | Nemotron 3 | 21.7% | ~20% |
 
-The temporal test breaks everyone. "Remember the bomb, count to 3" shouldn't be hard.
+The temporal test was hard on every model
 
 ---
 
@@ -75,7 +68,7 @@ Tool calls: resolveCombatAction (Aria attacks Goblin B)
 
 Goblin B is behind a wall. No line of sight. GLM rolled to hit anyway, then described the wall in its narration.
 
-**Minimax forgets poison for 2 turns:**
+**Minimax forgets to poison for 2 turns:**
 
 ```
 Expected Aria hp=15, got hp=13
@@ -170,10 +163,10 @@ cd dungeonbench
 npm install
 
 # Run against a model
-npm run eval -- --model openai/gpt-4o
+npm run eval -- --provider openai --model gpt-4o
 
 # Run specific test
-npm run eval -- --model openai/gpt-4o --test roleplay.dm.temporal.delayed-blast.v01
+npm run eval -- --provider openai --model gpt-4o --test roleplay.dm.temporal.delayed-blast.v01
 ```
 
 ---
