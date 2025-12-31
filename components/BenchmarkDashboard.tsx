@@ -26,70 +26,75 @@ const CSSBarChart = ({
   const safeMaxValue = maxValue > 0 ? maxValue : 1;
 
   return (
-    <div className="pt-8 pb-4">
-      {/* Chart Container */}
-      <div className="flex items-end justify-center gap-4" style={{ height: chartHeight }}>
-        {data.map((item, index) => {
-          const value = item[dataKey] as number;
-          const barHeight = Math.max((value / safeMaxValue) * chartHeight, 8);
-          const color = colorFn(index);
+    <div className="pt-8 pb-4 w-full">
+      {/* Scrollable wrapper for mobile */}
+      <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent pb-2">
+        <div className="min-w-fit">
+          {/* Chart Container */}
+          <div className="flex items-end justify-start md:justify-center gap-2 sm:gap-3 md:gap-4 px-4 md:px-0" style={{ height: chartHeight }}>
+            {data.map((item, index) => {
+              const value = item[dataKey] as number;
+              const barHeight = Math.max((value / safeMaxValue) * chartHeight, 8);
+              const color = colorFn(index);
 
-          return (
-            <div key={item.model} className="flex flex-col items-center group" style={{ width: 80 }}>
-              {/* Rank Badge for top 3 */}
-              {index < 3 && (
-                <div
-                  className="mb-2 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold shadow-lg"
-                  style={{
-                    backgroundColor: index === 0 ? '#fbbf24' : index === 1 ? '#9ca3af' : '#cd7f32',
-                    color: '#000'
-                  }}
-                >
-                  {index + 1}
+              return (
+                <div key={item.model} className="flex flex-col items-center group flex-shrink-0 w-14 sm:w-16 md:w-20">
+                  {/* Rank Badge for top 3 */}
+                  {index < 3 && (
+                    <div
+                      className="mb-2 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold shadow-lg"
+                      style={{
+                        backgroundColor: index === 0 ? '#fbbf24' : index === 1 ? '#9ca3af' : '#cd7f32',
+                        color: '#000'
+                      }}
+                    >
+                      {index + 1}
+                    </div>
+                  )}
+                  {index >= 3 && <div className="mb-2 h-6 sm:h-7" />}
+
+                  {/* Value Label */}
+                  <div
+                    className="text-xs sm:text-sm font-mono font-bold mb-2"
+                    style={{ color }}
+                  >
+                    {formatter(value)}
+                  </div>
+
+                  {/* Bar */}
+                  <div
+                    className="w-10 sm:w-12 md:w-14 rounded-t-lg transition-all duration-700 ease-out hover:scale-105 cursor-pointer"
+                    style={{
+                      height: barHeight,
+                      background: `linear-gradient(to top, ${color}cc, ${color})`,
+                      boxShadow: `0 0 30px ${color}50, inset 0 1px 0 rgba(255,255,255,0.2)`
+                    }}
+                    title={`${item.model}: ${formatter(value)}`}
+                    onClick={() => onBarClick?.(item)}
+                  />
                 </div>
-              )}
-              {index >= 3 && <div className="mb-2 h-7" />}
-
-              {/* Value Label */}
-              <div
-                className="text-sm font-mono font-bold mb-2"
-                style={{ color }}
-              >
-                {formatter(value)}
-              </div>
-
-              {/* Bar */}
-              <div
-                className="w-14 rounded-t-lg transition-all duration-700 ease-out hover:scale-105 cursor-pointer"
-                style={{
-                  height: barHeight,
-                  background: `linear-gradient(to top, ${color}cc, ${color})`,
-                  boxShadow: `0 0 30px ${color}50, inset 0 1px 0 rgba(255,255,255,0.2)`
-                }}
-                title={`${item.model}: ${formatter(value)}`}
-                onClick={() => onBarClick?.(item)}
-              />
-            </div>
-          );
-        })}
-      </div>
-
-      {/* X-Axis Labels */}
-      <div className="flex justify-center gap-4 mt-4 border-t border-neutral-700/50 pt-6 pb-10">
-        {data.map((item) => (
-          <div key={item.model} className="text-center" style={{ width: 80 }}>
-            <div
-              className="overflow-visible"
-              title={item.model}
-            >
-              <span
-                className="inline-block origin-top-left rotate-[35deg] whitespace-nowrap leading-none text-[11px] tracking-wide text-neutral-200 hover:text-white transition-colors cursor-default font-normal"
-              >
-                {item.model.split('/').pop()?.split(':')[0] || item.model}
-              </span>
-            </div>
+              );
+            })}
           </div>
-        ))}
+
+          {/* X-Axis Labels */}
+          <div className="flex justify-start md:justify-center gap-2 sm:gap-3 md:gap-4 mt-4 border-t border-neutral-700/50 pt-6 pb-10 px-4 md:px-0">
+            {data.map((item) => (
+              <div key={item.model} className="text-center flex-shrink-0 w-14 sm:w-16 md:w-20">
+                <div
+                  className="overflow-visible"
+                  title={item.model}
+                >
+                  <span
+                    className="inline-block origin-top-left rotate-[35deg] whitespace-nowrap leading-none text-[10px] sm:text-[11px] tracking-wide text-neutral-200 hover:text-white transition-colors cursor-default font-normal"
+                  >
+                    {item.model.split('/').pop()?.split(':')[0] || item.model}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

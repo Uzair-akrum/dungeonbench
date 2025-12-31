@@ -89,7 +89,6 @@ export default function App() {
       <footer className="relative z-10 border-t border-white/10 mt-20 py-8 bg-black/40">
         <div className="max-w-7xl mx-auto px-4 text-center text-neutral-500 text-sm">
           <p>© 2025 DungeonBench. Inspired by SkateBench.</p>
-          <p className="mt-2">"Roll for initiative."</p>
         </div>
       </footer>
     </div>
